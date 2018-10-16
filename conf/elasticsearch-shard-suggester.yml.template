@@ -1,0 +1,21 @@
+application:
+  invoke_hour: '16'
+  query_interval: 60
+
+clusters:
+  - url: elastic.cluster.com
+    protocol: http
+    port: 9200
+    timestring: '%Y.%m.%d'
+    threshold: 300
+    replicas: 1
+    username: admin
+    password: admin
+    basis: today
+    shrink: True
+    mode: dry_run
+
+logging:
+  loglevel: INFO
+  logfile: logs/elasticsearch-shard-suggester.log
+  format: '[%(levelname)s][%(asctime)s]%(message)s'
