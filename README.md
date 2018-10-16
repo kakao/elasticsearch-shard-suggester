@@ -74,8 +74,8 @@ logging:
 |username  |false   |if you use http basic authentication, type username in this field|String|
 |password  |false   |if you use http basic authentication, type password in this field. this value must encoded base64|String|
 |basis     |false   |if you want to calculate yesterday's index performance and make today index (today or yesterday)|today or yesterday|
-|shrink    |false   |default is False, if this field is set True, elasticsearch-shard-suggester is shrink to index|True or False|
-|mode      |false   |default is None|dry_run or blank|
+|shrink    |false   |default is False, if this field is set True, elasticsearch-shard-suggester is shrink to index.|True or False|
+|mode      |false   |default is None, If this field is setted dry_run, it don't create tomorrow index. But in log file, there's adjusted message|dry_run or blank|
 
 ### password encode
 ```
@@ -90,12 +90,12 @@ It has 3 classes. Monitor class is parent class, SearchTester class is performin
 ![how_to_work](images/how_to_work.png)
 
 1) Monitor class tests search performance through SearchTester class.
-2) SearchTester conducts search test using search API of ElasticSearch. You can change a query to yours. Default query is below. []If you want to change query, you modify core/search_tester.py file. And SearchTester class use ```preference=_shards:0```, so search request is not broadcast, but is carried to a single shard.
+2) SearchTester conducts search test using search API of ElasticSearch. You can change a query to yours. Default query is below. If you want to change query, you modify core/search_tester.py file. And SearchTester class use ```preference=_shards:0```, so search request is not broadcast, but is carried to a single shard.
 3) When the time defined invoke_time in ```conf/elasticsearch-shard-suggester.yml``` is reached, Monitor class makes index through ElasticSearch class.
 This is the most important logic from now on.
 At this time, Monitor class determines the optimal shards size and the number of shards at that time based on the took_time delivered through the searchtester class.
 Suppose today’s index is 500GB in size and consists of 10 shards, so the size of a single shard is 50GB. And if SearchTester class's search test result (last took_time) is 150ms and the threshold on the config is 300ms, the optimal shard size will be 100GB, twice the 50GB. Since the optimal shard size is determined to be 100GB, the tomorrow's index will accumulate 500GB, and eventually 5 shards will be created.
-However, if the final calculated number of shards is less than the number of data nodes, the performance can not be guaranteed when a large amount of data is suddenly indexed (ex. burst bulk api), so it is modified to the number of data nodes. However, if you set a shrink option on the config, the number of data nodes is ignored and set only to the number of shards calculated.
+However, if the final calculated number of shards is less than the number of data nodes, the performance can not be guaranteed when a large amount of data is suddenly indexed (ex. burst bulk api), so it is modified to the number of data nodes. However, if you set a ```shrink``` option on the config, the number of data nodes is ignored and set only to the number of shards calculated.
 4) ElasticSearch class creates tomorrow's index.
 
 ### Default Query

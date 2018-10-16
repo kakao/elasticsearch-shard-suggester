@@ -10,7 +10,7 @@ clusters:
     threshold: 300
     replicas: 1
     username: admin
-    password: admin
+    password: cGFzc3dvcmQ= #base64 encoded
     basis: today
     shrink: True
     mode: dry_run
