@@ -33,7 +33,7 @@ class ElasticSearch():
         else :
             tommorrow_timestamp = ( datetime.date.today() + datetime.timedelta(1)).strftime(self.timestring)
 
-        return "{index_name}-{tommorrow_timestamp}".format(index_name=index_name, tommorrow_timestamp=tommorrow_timestamp)
+        return "{index_name}{tommorrow_timestamp}".format(index_name=index_name, tommorrow_timestamp=tommorrow_timestamp)
 
     def get_index_of_today(self):
 
@@ -97,7 +97,7 @@ class ElasticSearch():
 
     def _extract_index_name(self, index_name, timestamp):
 
-        return index_name.split("-{timestamp}".format(timestamp=timestamp))[0]
+        return index_name.split("{timestamp}".format(timestamp=timestamp))[0]
 
     def _transform_store_size_to_bytes(self, store_size):
 

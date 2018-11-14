@@ -4,7 +4,7 @@ _elasticsearch-shard-suggester_ 는 오늘자 인덱스의 검색 성능을 바�
 
 ## Version
 ```
-0.01
+0.02
 ```
 
 ## How to run

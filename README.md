@@ -4,7 +4,7 @@ _elasticsearch-shard-suggester_ is a script that suggests the best number of pri
 
 ## Version
 ```
-0.01
+0.02
 ```
 
 ## How to run
